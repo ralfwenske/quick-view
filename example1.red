@@ -1,7 +1,7 @@
 Red [    File: %example1.red    Purpose: {demo quick-view (q-v)}    ]
 github-url: https://raw.githubusercontent.com/ralfwenske/quick-view/master/
-#include rejoin [github-url %q-v.red]
-get-img: func [os][load rejoin [github-url %example1- os %.jpg]]
+do load rejoin [github-url %q-v.red]
+get-img: func [os][copy load rejoin [github-url %example1- os %.jpg]]
 
 v: q-v/duplicate     ;context for window with   top right bottom left center   -panels
 v/window/size: 1150x750
@@ -29,5 +29,5 @@ v/pane v/bottom compose [
         react [ face/offset: as-pair (v/bottom/size/x - face/size/x - 30) 4]
 ]; bottom panel-----------------------------------------------------------
 
-editor/text: read %example1.red
+editor/text: read rejoin [github-url %example1.red]
 view/flags v/window 'resize
