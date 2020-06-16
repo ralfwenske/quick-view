@@ -1,6 +1,7 @@
 Red [    File: %example1.red    Purpose: {demo quick-view (q-v)}    ]
-#include %q-v.red
-
+github-url: https://raw.githubusercontent.com/ralfwenske/quick-view/master/
+#include rejoin [github-url %q-v.red]
+get-img: func [os][load rejoin [github-url %example1- os %.jpg]]
 v: q-v/duplicate     ;context for window with   top right bottom left center   -panels
 v/window/size: 1150x750
 v/add-style [style a-fxd-red: a-fxd font-color red font-size 12 ]             ;a-fxd --> area fixed 
@@ -13,12 +14,12 @@ v/pane v/left [ below
     button "<" [v/change-width 'left -10]
     button ">" [v/change-width 'left +10]
 ]; left panel-------------------------------------------------------------
-v/pane v/center [                                               ;VID into center pane
+v/pane v/center compose/deep [                                               ;VID into center pane
     at 5x0 tab-panel [
         "Source" [at 0x0 editor: a-fxd-red react [face/size: v/center/size - 0x55]]
-        "on Mac" [image %example1-mac.jpg react [face/size: v/center/size - 30x55]]
-        "on W10" [image %example1-w10.jpg react [face/size: v/center/size - 30x55]]
-        "on GTK" [image %example1-gtk.jpg react [face/size: v/center/size - 30x55]]
+        "on Mac" [image (get-img 'mac) react [face/size: v/center/size - 30x55]]
+        "on W10" [image (get-img 'w10) react [face/size: v/center/size - 30x55]]
+        "on GTK" [image (get-img 'gtk) react [face/size: v/center/size - 30x55]]
     ] react [face/size: v/center/size]
 ]; center panel-----------------------------------------------------------
 v/pane v/bottom compose [
