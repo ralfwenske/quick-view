@@ -2,9 +2,10 @@ Red [    File: %example1.red    Purpose: {demo quick-view (q-v)}    ]
 github-url: https://raw.githubusercontent.com/ralfwenske/quick-view/master/
 #include rejoin [github-url %q-v.red]
 get-img: func [os][load rejoin [github-url %example1- os %.jpg]]
+
 v: q-v/duplicate     ;context for window with   top right bottom left center   -panels
 v/window/size: 1150x750
-v/add-style [style a-fxd-red: a-fxd font-color red font-size 12 ]             ;a-fxd --> area fixed 
+v/add-style [style a-fxd-red: a-fxd font-color red font-size 11 ]             ;a-fxd --> area fixed 
 
 v/pane v/top compose [                                          ;put VID into top pane
     t-fxd "%example1.red" black font-size 30 font-color yellow  ;t-fxd --> text fixed  
