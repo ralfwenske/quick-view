@@ -1,7 +1,7 @@
 Red [    File: %example1.red    Purpose: {demo quick-view (q-v)}    ]
 github-url: https://raw.githubusercontent.com/ralfwenske/quick-view/master/
+images: [] foreach os ['mac 'w10 'gtk] [append images do load rejoin [github-url %example1- os %.jpg]]
 do load rejoin [github-url %q-v.red]
-get-img: func [os][copy load rejoin [github-url %example1- os %.jpg]]
 
 v: q-v/duplicate     ;context for window with   top right bottom left center   -panels
 v/window/size: 1150x750
@@ -18,9 +18,9 @@ v/pane v/left [ below
 v/pane v/center compose/deep [                                               ;VID into center pane
     at 5x0 tab-panel [
         "Source" [at 0x0 editor: a-fxd-red react [face/size: v/center/size - 0x55]]
-        "on Mac" [image (get-img 'mac) react [face/size: v/center/size - 30x55]]
-        "on W10" [image (get-img 'w10) react [face/size: v/center/size - 30x55]]
-        "on GTK" [image (get-img 'gtk) react [face/size: v/center/size - 30x55]]
+        "on Mac" [image (images/1) react [face/size: v/center/size - 30x55]]
+        "on W10" [image (images/2) react [face/size: v/center/size - 30x55]]
+        "on GTK" [image (images/3) react [face/size: v/center/size - 30x55]]
     ] react [face/size: v/center/size]
 ]; center panel-----------------------------------------------------------
 v/pane v/bottom compose [

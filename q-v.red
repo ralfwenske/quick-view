@@ -38,7 +38,7 @@ q-v: context [
     ]; resize
 
     duplicate: func [/widths width-blk [block!] /order o [block!] /local v][
-        v: copy q-v
+        v: copy/deep q-v
         if widths [
             v/sizes: copy width-blk
         ]
@@ -52,12 +52,6 @@ q-v: context [
                 r [v/dims/2: reduce [ is-set v/dims/1/2 v/sizes/2 is-set v/dims/3/2 ] ]
                 b [v/dims/3: reduce [ is-set v/dims/4/2 v/sizes/3 is-set v/dims/2/2 ] ]
                 l [v/dims/4: reduce [ is-set v/dims/1/2 v/sizes/4 is-set v/dims/3/2 ] ]
-                {
-                t [v/dims/1: reduce [ v/dims/4/2 v/sizes/1 v/dims/2/2 ] ]
-                r [v/dims/2: reduce [ v/dims/1/2 v/sizes/2 v/dims/3/2 ] ]
-                b [v/dims/3: reduce [ v/dims/4/2 v/sizes/3 v/dims/2/2 ] ]
-                l [v/dims/4: reduce [ v/dims/1/2 v/sizes/4 v/dims/3/2 ] ]
-                }
             ]
         ]
 
