@@ -3,7 +3,8 @@
 Experimental: changes are likely
 
 Purpose:
-When exploring Red q-v allows to create a resizable GUI with 5 panels.
+To avoid having to fiddle with pixels q-v allows to create a resizable GUI with 5 panels.
+Visual presentation of data is sometimes more appealing than endless console listings :)
 ```
 Red []
 #include %q-v.red
@@ -11,7 +12,7 @@ v: q-v/duplicate
 view/flags v/window 'resize
 ```
 ![alt default view](.view-default.jpg)
----
+- - - -
 
 Outer panel's width can be set with /widths [t r b l]
 ```
@@ -22,7 +23,7 @@ v/window/size: 400x200
 view/flags v/window 'resize
 ```
 ![alt default view](.view-widths.jpg) ![alt default view](.view-resized.jpg)
----
+- - - -
 
 Determine panels width: the order determines their extent:
 ```
@@ -33,7 +34,7 @@ v/window/text: "Quick View Demo"    ;title
 view/flags v/window 'resize
 ```
 ![alt default view](.view-order.jpg) 
----
+- - - -
 
 %example1.red shows how to place VID code into the panels
 `top right bottom left` and `center` refer to each
@@ -54,3 +55,5 @@ NOTE:
     The `area` face when resizing behaves differently on each platform.
 
     The `text` face on Windows misbehaves.
+
+    Size does not seem to work for Windows.

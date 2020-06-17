@@ -1,4 +1,5 @@
 Red [    File: %example1.red    Purpose: {demo quick-view (q-v)}    ]
+
 github-url: https://raw.githubusercontent.com/ralfwenske/quick-view/master/
 images: [] foreach os ['mac 'w10 'gtk] [append images do load rejoin [github-url %example1- os %.jpg]]
 do load rejoin [github-url %q-v.red]
