@@ -1,10 +1,21 @@
 # quick-view
  
-Experimental: changes are likely
+Experimental: changes are likely.
+I also would appreciate suggestions to improve and make the code more 'Red' like.
+My aim (besides having fun exploring Red) is to be able to quickly have a visual
+interface where I can show results of my data processing - without getting lost
+in presentation logic and pixel counting...
+... and perhaps achieve the same for others - beginners and experts - who so 
+generously share their tools and coding insights.
 
 Purpose:
-To avoid having to fiddle with pixels q-v allows to create a resizable GUI with 5 panels.
-Visual presentation of data is sometimes more appealing than endless console listings :)
+q-v allows to create a GUI with 5 panels.
+A fully working graphical user interface with a few lines of
+(hopefully self explaining) code:
+    Resizable (the window or outer panels)
+    Dialog preventing data loss if accidental quitting
+    Easy identifying of panels: top right bottom left center
+
 ```
 Red []
 #include %q-v.red
@@ -36,24 +47,20 @@ view/flags v/window 'resize
 ![alt default view](.view-order.jpg) 
 - - - -
 
-%example1.red shows how to place VID code into the panels
-`top right bottom left` and `center` refer to each
-Here the Linux (GTK) version:
-![alt default view](example1-gtk.jpg) 
+%example1.red shows how to place VID code into the panels 
+and show how user interaction can be coded
+Here the MacOS version:
+![alt default view](example1-mac.jpg) 
 
 
 NOTE:
     
     There are some unexpected things that remind us of the Alpha-status of Red.
-    
-    %example1.red can be pasted into a console and runs on Windows and Linux.
-
-    However on my macs this doesn't work: saving the copied code into a file works though.
-
-    Then again on Mac the loading of the images seems not to work - Windows and Linux are fine.
 
     The `area` face when resizing behaves differently on each platform.
 
     The `text` face on Windows misbehaves.
 
-    Size does not seem to work for Windows.
+    Font size seems different on Windows. (Font is "Courier")
+
+    On GTK when a menu is shown the viewable size is not adjusted.

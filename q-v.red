@@ -17,6 +17,7 @@ q-v: context [
     w-size: 900x600
     sizes: [60 30 30 150]
     dims: [ [0 0 0] [0 0 0] [0 0 0] [0 0 0] ] ; top right bottom left
+    drag-marker: false
     styles: [
         style t-fxd: text font-name "Courier" font-size 14
         style a-fxd: area font-name "Courier" font-size 14
@@ -70,7 +71,7 @@ q-v: context [
                             if  (block? face/parent/extra) [
                                 face/size: face/parent/size
                                 face/parent/extra/obj/resize face/parent
-                                ;self/resize face/parent
+                                ;resize face/parent
                             ]
                         ]
                     ]
@@ -85,6 +86,60 @@ q-v: context [
         v/window/extra/obj: v
         v
     ]; duplicate
+
+    confirm-quit: function [][ 
+        txt: ""
+        unless unset! = type? :confirm-quit-text [
+            txt: confirm-quit-text
+        ]
+        if txt = "" [
+            return true
+        ]
+        res: none 
+        view/flags [size 200x100
+            title "Quit application?"
+            text txt return 
+            button "OK" [res: true unview] 
+            button "NO" [res: false unview]
+        ][no-buttons  modal popup]
+        res
+    ]; confirm-quit
+
+    menu: func [menu-src [block!]][
+        the-menu: copy []
+        the-actors: copy []
+
+        m-ix: 0
+        foreach [main sub] menu-src [
+            append the-menu main 
+            ;append the-menu newline
+            blk-a: copy []
+            blk-m: copy []
+            foreach [nm fc] sub [
+                either nm = '--- [
+                    append blk-m '---
+                ][
+                    m-ix: m-ix + 1
+                    lb: to-word rejoin ['menu- m-ix]
+                    append blk-m reduce [nm lb]
+                    append blk-a reduce [lb fc]
+                ]
+            ]
+            append/only the-menu blk-m
+            append the-actors copy blk-a                  
+        ]
+
+        window/actors: context compose/deep [
+            on-menu: func [f e][
+                switch e/picked [(the-actors)]
+            ]
+            on-close: func [f e][
+                unless confirm-quit ['continue]
+            ]   
+        ] 
+        ;add-confirm-quit
+        window/menu: copy the-menu  
+    ]; menu
 
     add-style: func [newstyle [block!]][
         append styles newstyle
@@ -106,11 +161,25 @@ q-v: context [
         resize v/window
     ]
 
+    size-limits: function [ min-size [pair!] max-size [pair!]][
+        offs: 10x10
+        layout/parent/tight compose/deep [ 
+            at (window/size - offs) dragger: base red offs cursor 'hand loose  
+                on-down [system/view/auto-sync?: off ] 
+                on-up   [show face/parent system/view/auto-sync?: on ] 
+                on-drag [
+                    face/offset: max (min-size) min (max-size) face/offset 
+                    face/parent/size: face/offset + (offs) 
+                    show face/parent            
+                ]       
+        ]  window none
+        drag-marker: true
+    ]; add-drag-marker
+
     about: does [
         rejoin ["Red " system/version
             " for " system/platform
             " built " system/build/date
         ]
     ]
-
 ]; q-v    
