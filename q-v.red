@@ -6,59 +6,70 @@ Red [
     Date:   11-Jun-2020
     Purpose: {
         create a resizable window with up to 5 panels
-        as base for further develpment
+        as base for further development
         (q-v --> quick-view)
     }   
 ]
 
-q-v: context [
-    window: none
-    top: right: bottom: left: center: none
+do q-v: make object! [
     w-size: 900x600
-    sizes: [60 30 30 150]
-    dims: [ [0 0 0] [0 0 0] [0 0 0] [0 0 0] ] ; top right bottom left
+    w-limits: []
+    sizes: [top 60 right 30 bottom 30 left 150]
+    order: [t b l r]
+
+    dims: [top [0 0 0] right [0 0 0] bottom [0 0 0] left [0 0 0] ]
+    sizes-hidden: copy sizes 
+    top: right: bottom: left: center: none
     drag-marker: false
+    window: none
     styles: [
         style t-fxd: text font-name "Courier New" font-size 14
         style a-fxd: area font-name "Courier New" font-size 14
     ]; styles
 
-    resize: function [w /extern top right bottom left center][        
-        unless object? w  [exit]
-        top/offset:     as-pair (dims/1/1 * sizes/4) 0
-        top/size:       as-pair w/size/x - top/offset/x - (dims/1/3 * sizes/2) sizes/1 
-        right/offset:   as-pair w/size/x - sizes/2 dims/2/1 * sizes/1
-        right/size:     as-pair sizes/2 w/size/y - right/offset/y - (dims/2/3 * sizes/3)
-        bottom/offset:  as-pair dims/3/1 * sizes/4 w/size/y - sizes/3
-        bottom/size:    as-pair w/size/x - bottom/offset/x - (dims/3/3 * sizes/2) dims/3/2 
-        left/offset:    as-pair 0 (dims/4/1 * sizes/1)
-        left/size:      as-pair sizes/4 w/size/y - left/offset/y - (dims/4/3 * sizes/3)
-        center/offset:  as-pair sizes/4 sizes/1
+    resize: func [][ ;[w /extern top right bottom left center][        
+        ;unless object? w  [exit]
+        if none = top [exit]
+        top/offset:     as-pair (dims/top/1 * sizes/left) 0
+        top/size:       as-pair window/size/x - top/offset/x - (dims/top/3 * sizes/right) sizes/top 
+        right/offset:   as-pair window/size/x - sizes/right dims/right/1 * sizes/top
+        right/size:     as-pair sizes/right window/size/y - right/offset/y - (dims/right/3 * sizes/bottom)
+        bottom/offset:  as-pair dims/bottom/1 * sizes/left window/size/y - sizes/bottom
+        bottom/size:    as-pair window/size/x - bottom/offset/x - (dims/bottom/3 * sizes/right) sizes/bottom 
+        left/offset:    as-pair 0 (dims/left/1 * sizes/top)
+        left/size:      as-pair sizes/left window/size/y - left/offset/y - (dims/left/3 * sizes/bottom)
+        center/offset:  as-pair sizes/left sizes/top
         center/size:    (as-pair right/offset/x bottom/offset/y) - center/offset
-        w
+        ;w
     ]; resize
 
-    duplicate: func [/widths width-blk [block!] /order o [block!] /local v][
-        v: copy/deep q-v
-        if widths [
-            v/sizes: copy width-blk
+    mix: function [default [block!] mixin [block!]][
+        foreach [pnl val] mixin [
+            default/:pnl: val
         ]
-        unless order [
-            o: [t b l r]        ;default: top bottom left right
-        ]
+        default
+    ]
+
+    init: func [parms [block!]] [
+        if parms/w-size [w-size: parms/w-size]
+        if parms/w-limits [w-limits: parms/w-limits]
+        if parms/sizes [
+            sizes: mix sizes parms/sizes
+            sizes-hidden: copy sizes]
+        if parms/order [order: parms/order]
+
         is-set: func [val [integer!]][either val > 0 [1][0]]
-        foreach p o [ 
+        foreach p order [   ;order determines what extent a panel claims
             switch p [
-                t [v/dims/1: reduce [ is-set v/dims/4/2 v/sizes/1 is-set v/dims/2/2 ] ]
-                r [v/dims/2: reduce [ is-set v/dims/1/2 v/sizes/2 is-set v/dims/3/2 ] ]
-                b [v/dims/3: reduce [ is-set v/dims/4/2 v/sizes/3 is-set v/dims/2/2 ] ]
-                l [v/dims/4: reduce [ is-set v/dims/1/2 v/sizes/4 is-set v/dims/3/2 ] ]
+                t [dims/top: reduce [ is-set dims/left/2 sizes/top is-set dims/right/2 ] ]
+                r [dims/right: reduce [ is-set dims/top/2 sizes/right is-set dims/bottom/2 ] ]
+                b [dims/bottom: reduce [ is-set dims/left/2 sizes/bottom is-set dims/right/2 ] ]
+                l [dims/left: reduce [ is-set dims/top/2 sizes/left is-set dims/bottom/2 ] ]
             ]
         ]
-
-        v/window: layout/tight compose [
-            size (v/w-size)
-            panel (v/w-size) [
+        window: layout/tight compose [
+            size (w-size)
+            panel (w-size) [
                 panel gray 
                 panel pewter 
                 panel gray 
@@ -68,24 +79,38 @@ q-v: context [
                 react [
                     if (object? face) [
                         if (object? face/parent)[
-                            if  (block? face/parent/extra) [
-                                face/size: face/parent/size
-                                face/parent/extra/obj/resize face/parent
-                                ;resize face/parent
-                            ]
+                            face/size: face/parent/size
+                            resize face/parent
+                            ;if  (block? face/parent/extra) [
+                            ;    face/size: face/parent/size
+                            ;    face/parent/extra/obj/resize face/parent
+                            ;    ;resize face/parent
+                            ;]
                         ]
                     ]
                 ]
         ]
-        v/top:      v/window/pane/1/pane/1 
-        v/right:    v/window/pane/1/pane/2 
-        v/bottom:   v/window/pane/1/pane/3 
-        v/left:     v/window/pane/1/pane/4 
-        v/center:   v/window/pane/1/pane/5 
-        v/window/extra: [obj: none]
-        v/window/extra/obj: v
-        v
-    ]; duplicate
+        if parms/title [window/text: parms/title]
+        top:      window/pane/1/pane/1 
+        right:    window/pane/1/pane/2 
+        bottom:   window/pane/1/pane/3 
+        left:     window/pane/1/pane/4 
+        center:   window/pane/1/pane/5 
+        if (length? w-limits) = 2 [
+            offs: 10x10
+            layout/parent/tight compose/deep [ 
+                at (window/size - offs) dragger: base red offs cursor 'hand loose  
+                    on-down [system/view/auto-sync?: off ] 
+                    on-up   [show face/parent system/view/auto-sync?: on ] 
+                    on-drag [
+                        face/offset: max (w-limits/1) min (w-limits/2) face/offset 
+                        face/parent/size: face/offset + (offs) 
+                        show face/parent            
+                    ]       
+            ]  window none
+            drag-marker: true
+        ]
+    ]; init
 
     confirm-quit: function [][ 
         txt: ""
@@ -153,12 +178,23 @@ q-v: context [
 
     change-width: func [p px [integer!]][
         switch p [
-            top [v/sizes/1: v/sizes/1 + px]
-            right [v/sizes/2: v/sizes/2 + px]
-            bottom [v/sizes/3: v/sizes/3 + px]
-            left [v/sizes/4: v/sizes/4 + px]
+            top [sizes/top: sizes/top + px]
+            right [sizes/right: sizes/right + px]
+            bottom [sizes/bottom: sizes/bottom + px]
+            left [sizes/left: sizes/left + px]
         ]
-        resize v/window
+        sizes-hidden: copy sizes
+        resize window
+    ]
+
+    visible: func [p yn [logic!]][
+        switch p [
+            top     [sizes/top:     either yn [sizes-hidden/top][0]]
+            right   [sizes/right:   either yn [sizes-hidden/right][0]]
+            bottom  [sizes/bottom:  either yn [sizes-hidden/bottom][0]]
+            left    [sizes/left:    either yn [sizes-hidden/left][0]]
+        ]
+        resize window
     ]
 
     size-limits: function [ min-size [pair!] max-size [pair!]][
