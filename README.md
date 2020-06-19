@@ -29,7 +29,7 @@ view/flags v/window 'resize
 ![alt default view](.view-default.jpg)
 - - - -
 
-Outer panel's width can be set with /widths [t r b l]
+Outer panel's width can be set with sizes
 ```
 Red []
 #include %q-v.red
@@ -43,7 +43,7 @@ view/flags v/window 'resize
 ![alt default view](.view-widths.jpg) ![alt default view](.view-resized.jpg)
 - - - -
 
-Determine panels width: the order determines their extent:
+Panels extent is determined by order: panel gets what is left
 ```
 Red []
 #include %q-v.red
@@ -58,7 +58,7 @@ view/flags v/window 'resize
 - - - -
 
 %example1.red shows how to place VID code into the panels 
-and show how user interaction can be coded. 
+and show how user interaction can be coded separate from layout. 
 - hit a key in the area (dialog is triggered when closing)
 - resize left panel
 - hide and show left panel
