@@ -49,8 +49,8 @@ view/flags v/window 'resize
 
 %example1.red shows how to place VID code into the panels 
 and show how user interaction can be coded
-Here the MacOS version:
-![alt default view](example1-mac.jpg) 
+Here the Windows 10 version:
+![alt default view](example1-w10.jpg) 
 
 
 NOTE:
@@ -59,8 +59,6 @@ NOTE:
 
     The `area` face when resizing behaves differently on each platform.
 
-    The `text` face on Windows misbehaves.
-
-    Font size seems different on Windows. (Font is "Courier")
+    The `text` face on Windows without bg-color is not transparent.
 
     On GTK when a menu is shown the viewable size is not adjusted.

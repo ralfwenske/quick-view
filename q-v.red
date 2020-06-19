@@ -19,8 +19,8 @@ q-v: context [
     dims: [ [0 0 0] [0 0 0] [0 0 0] [0 0 0] ] ; top right bottom left
     drag-marker: false
     styles: [
-        style t-fxd: text font-name "Courier" font-size 14
-        style a-fxd: area font-name "Courier" font-size 14
+        style t-fxd: text font-name "Courier New" font-size 14
+        style a-fxd: area font-name "Courier New" font-size 14
     ]; styles
 
     resize: function [w /extern top right bottom left center][        
