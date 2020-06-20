@@ -80,5 +80,6 @@ NOTE:
     The `check` face on MacOS without bg-color is not transparent.
 
     On GTK when a menu is shown the height of the viewable size is not reduced by menu-height.
-    When the menu is omitted resizing works partly. Exceeding the limits causes strange behaviour of the dragger. (Working fine on macOS and W10)
+    When the menu is omitted resizing works partly. Exceeding the limits causes strange behaviour of the dragger. 
+    (Working fine on macOS and W10)
     Use `view/flags v/window 'resize` instead.
